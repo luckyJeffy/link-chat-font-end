@@ -3,7 +3,9 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store";
 import "./registerServiceWorker";
-import './plugins/iview.js'
+import "./plugins/iview.js";
+
+import "@/styles/index.scss"; // global css
 
 Vue.config.productionTip = false;
 
