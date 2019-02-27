@@ -38,7 +38,7 @@
     }
     .form-aera {
       padding: 1.5rem 1rem;
-      .insterest-bar,
+      .interest-bar,
       .language-bar {
         padding-bottom: 1rem;
         h3 {
@@ -119,7 +119,6 @@
 }
 </style>
 
-
 <template>
   <div style="height: 100%;">
     <i-layout class="layout">
@@ -181,23 +180,24 @@
             :md="16"
             :lg="16"
           >
-            <div class="insterest-bar">
+            <div class="interest-bar">
               <h3>What do you wanna talk about?</h3>
               <span class="description">It will find someone who’s had some interest of the same
                 things</span>
               <vue-tags-input
-                v-model="insterestTag"
-                :tags="insterestTags"
+                v-model="interestTag"
+                :tags="interestTags"
                 placeholder="Add your interest here (optional)"
-                @tags-changed="newTags => (insterestTags = newTags)"
+                @tags-changed="setInterestTags"
               />
             </div>
             <div class="language-bar">
               <h3>Language*</h3>
               <span class="description">Select ‘English’ to chat in English</span>
               <Select
-                v-model="selectedLanguage"
+                :value="selectedLanguage"
                 filterable
+                @on-change="setLanguage"
               >
                 <Option
                   v-for="item in languageList"
@@ -221,7 +221,7 @@
           >
             <i-button
               class="button"
-              to="@/views/chat"
+              to="/chat"
               long
             >PRESS TO GO</i-button>
           </i-col>
@@ -235,8 +235,9 @@
   </div>
 </template>
 <script>
+import { mapGetters, mapActions } from 'vuex'
 import VueTagsInput from '@johmun/vue-tags-input';
-import { listForSelect as languageList } from '@/utils/languageList';
+import { listForSelect as languageList } from '@/utils/languageList'
 
 export default {
   components: {
@@ -244,22 +245,35 @@ export default {
   },
   data() {
     return {
-      insterestTag: '',
-      insterestTags: [],
-      selectedLanguage: 'en_US',
+      interestTag: '',
       isCollapsed: true,
       languageList
     };
   },
   computed: {
+    ...mapGetters({
+      'selectedLanguage': 'language',
+      'interestTags': 'interest',
+      'status': 'status'
+    }),
     rotateIcon() {
-      return ['menu-icon', this.isCollapsed ? '' : 'rotate-icon'];
+      return ['menu-icon', this.isCollapsed ? '' : 'rotate-icon']
     }
   },
   methods: {
+    ...mapActions({
+      'setLanguage': 'setLanguage',
+      'setInterestTags': 'setInterest',
+      'setMatchStatus': 'setMatchStatus'
+    }),
     collapsedSider() {
       this.$refs.side1.toggleCollapse();
     }
+  },
+  created() {
+    if (this.status === 'matching') {
+      this.setMatchStatus('') // Update match status to none.
+    }
   }
-};
+}
 </script>
