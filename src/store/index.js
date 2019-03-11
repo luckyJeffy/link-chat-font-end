@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import createPersistedState from 'vuex-persistedstate'
 import getters from './getters'
 import app from './modules/app'
 import chat from './modules/chat'
@@ -11,5 +12,6 @@ export default new Vuex.Store({
     app,
     chat
   },
-  getters
+  getters,
+  plugins: [createPersistedState()]
 })
